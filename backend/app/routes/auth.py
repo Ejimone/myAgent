@@ -126,8 +126,8 @@ async def google_callback_get(
     This endpoint receives the authorization code from Google and redirects to the frontend
     with the code as a query parameter
     """
-    # Construct the frontend URL to redirect to
-    frontend_url = "http://localhost:3000/google-callback"
+    # Construct the frontend URL to redirect to - match the route in App.js
+    frontend_url = "http://localhost:3000/auth/google/callback"
     redirect_url = f"{frontend_url}?code={code}"
     
     if state:
