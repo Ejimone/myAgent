@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from typing import Any, Dict, Optional
 
@@ -113,8 +114,31 @@ async def login_google():
     return {"auth_url": auth_url}
 
 
+# Add a new GET route for the Google OAuth callback
+@router.get("/accounts/google/login/callback/")
+async def google_callback_get(
+    code: str,
+    state: Optional[str] = None,
+    db: Session = Depends(get_db)
+) -> RedirectResponse:
+    """
+    Handle Google OAuth callback via GET request
+    This endpoint receives the authorization code from Google and redirects to the frontend
+    with the code as a query parameter
+    """
+    # Construct the frontend URL to redirect to
+    frontend_url = "http://localhost:3000/google-callback"
+    redirect_url = f"{frontend_url}?code={code}"
+    
+    if state:
+        redirect_url += f"&state={state}"
+    
+    # Redirect to the frontend callback page
+    return RedirectResponse(url=redirect_url)
+
+
 @router.post("/google/callback", response_model=Token)
-async def google_callback(
+async def google_callback_post(
     *, db: Session = Depends(get_db), data: GoogleAuthRequest
 ) -> Dict[str, str]:
     """

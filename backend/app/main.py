@@ -32,6 +32,10 @@ app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth")
 app.include_router(classroom.router, prefix=f"{settings.API_V1_STR}/classroom")
 app.include_router(assignments.router, prefix=f"{settings.API_V1_STR}/assignments")
 
+# Include the Google OAuth callback route at the root level
+# This is needed because Google redirects to this specific URL path
+from app.routes.auth import google_callback_get
+app.add_route("/accounts/google/login/callback/", google_callback_get, methods=["GET"])
 
 @app.get("/")
 def read_root():
