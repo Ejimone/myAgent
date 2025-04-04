@@ -1,0 +1,22 @@
+# FastAPI & server - core dependencies
+fastapi
+uvicorn
+python-multipart
+pydantic
+python-jose
+passlib
+python-dotenv
+bcrypt
+
+# Database
+sqlalchemy
+alembic
+
+# Google API
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+
+# HTTP clients
+httpx==0.24.1
